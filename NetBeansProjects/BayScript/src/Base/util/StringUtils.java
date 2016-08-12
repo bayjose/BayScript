@@ -185,21 +185,23 @@ public class StringUtils {
     
     public static String[] forceLoadData(String path){
         LinkedList<String> data = new LinkedList<String>();
+        String directory = StringUtils.getAbsPath()+path;
+        directory = directory.replaceAll("/build/classes/", "");
         try {
-            Scanner in = new Scanner(new File(StringUtils.getAbsPath()+path));
-            do{
+            Scanner in = new Scanner(new File(directory));
+            while(in.hasNext()){
                 data.add(in.nextLine());
-            }while(in.hasNext());
+            }
             in.close();
         } catch (StackOverflowError e) {
             
         }catch (Exception e) {
             StringUtils.path = "cpu";
             try{
-                Scanner in = new Scanner(new File(StringUtils.getAbsPath()+path));
-                do{
-                data.add(in.nextLine());
-                }while(in.hasNext());
+                Scanner in = new Scanner(new File((StringUtils.getAbsPath()+path).replaceAll("/build/classes/", "/")));
+                while(in.hasNext()){
+                    data.add(in.nextLine());
+                }
                 in.close();
             }catch(Exception e2){
                 e2.printStackTrace();

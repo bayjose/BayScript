@@ -8,7 +8,6 @@ package ScriptingEngine;
 import Base.BayScript;
 import ScriptingEngine.exceptions.MethodNotFoundException;
 import ScriptingEngine.exceptions.ScriptNotFoundException;
-import Base.Keyboard;
 import Base.util.Point2D;
 import Base.util.StringUtils;
 import Command.CommandManager;
@@ -44,7 +43,7 @@ public class Script {
     
     public Script(String path){
         this.name = path;
-        this.path = "Games/"+"temp"+"/Scripts/"+path;
+        this.path = "Scripts/"+path;
         Profileing.increaseNumCount();
         //save an index of the data before it wasn manipulated
         this.initialData = data;
@@ -435,7 +434,7 @@ public class Script {
         //look through global vars first
         for(int i=0; i<GlobalVars.vars.size(); i++){
             if(name.equals(GlobalVars.vars.get(i).name.replaceAll(" ", ""))){
-                 if(this.getVars().get(i).name.equals("random")){
+                if(GlobalVars.vars.get(i).name.equals("random")){
                     GlobalVars.vars.get(i).setData(Math.random()+"");
                 }
                 return GlobalVars.vars.get(i);

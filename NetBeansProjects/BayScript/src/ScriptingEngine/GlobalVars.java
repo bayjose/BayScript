@@ -17,7 +17,7 @@ public class GlobalVars {
     public static LinkedList<Variable> vars = new LinkedList<Variable>();
     
     public GlobalVars(){
-       
+
     }
     
     public void init(){
@@ -32,6 +32,7 @@ public class GlobalVars {
         GlobalVars.vars.add(new VarInt("defaultName", "BayScript"));
         GlobalVars.vars.add(new VarInt("defaultWidth", "256"));
         GlobalVars.vars.add(new VarInt("defaultHeight", "512"));
+        System.out.println("Global Vars have been Initialized.");
     }
     
     public static void tick(){

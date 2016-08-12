@@ -16,9 +16,13 @@ import javax.swing.JFrame;
  */
 public class Window {
     
+    private Canvas canvas;
+    
     public Window(Canvas screen){
         JFrame frame = new JFrame(GlobalVars.getVar("defaultName"));
-        Dimension dim = new Dimension(256,256);
+        Dimension dim = new Dimension(
+                Integer.parseInt(GlobalVars.getVar("defaultWidth")),
+                Integer.parseInt(GlobalVars.getVar("defaultHeight")));
         
         screen.setPreferredSize(dim);
         screen.setMaximumSize(dim);
@@ -31,5 +35,10 @@ public class Window {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
+        canvas = screen;
+    }
+    
+    public Canvas getCanvas(){
+        return this.canvas;
     }
 }

@@ -1,13 +1,12 @@
 package Base;
 
 
-import Base.Keyboard;
-import Base.MouseInput;
 import Command.Command;
+import ScriptingEngine.GlobalVars;
 import ScriptingEngine.Script;
 import ScriptingEngine.exceptions.ScriptNotFoundException;
 import java.awt.Canvas;
-import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
 import java.util.LinkedList;
@@ -27,10 +26,9 @@ public class BayScript extends Canvas implements Runnable{
     private static boolean running = false;
     private static Thread thread;
     
-    public static final boolean debug = false;
+    public static final boolean debug = true;
     private int frames = 0;
     
-    private static Graphics g = null;
     public static int WIDTH = 0;
     public static int HEIGHT = 0;
     
@@ -38,6 +36,7 @@ public class BayScript extends Canvas implements Runnable{
     public static LinkedList<Script> scripts = new LinkedList<Script>();
     
     private static Canvas canvas = null;
+    
     
     public static boolean isRunning(){
         return running;
@@ -94,10 +93,10 @@ public class BayScript extends Canvas implements Runnable{
                 last = now;
             }
             
-            if(g != null){
+//            if(g != null){
                 render();
                 frames++;
-            }
+//            }
             
             if(System.currentTimeMillis() - age > 1000){
                 age = System.currentTimeMillis();
@@ -113,6 +112,8 @@ public class BayScript extends Canvas implements Runnable{
     
     public void init(){
         System.out.println("Starting Listeners...");
+        GlobalVars vars = new GlobalVars(); 
+        vars.init();
         try{
             if(canvas!=null){
                 canvas.addMouseListener(new MouseInput());
@@ -126,15 +127,20 @@ public class BayScript extends Canvas implements Runnable{
                 this.addKeyListener(new Keyboard());
                 WIDTH = this.getWidth();
                 HEIGHT = this.getHeight();
+                canvas = window.getCanvas();
+//                this.createBufferStrategy(2);
             }
             System.out.println("Success...");
         }catch(Exception e){
             System.out.println("Failure...");
             e.printStackTrace();
         }
+
+        //create directory
     }
     
     public void tick(){
+        canvas.setSize(new Dimension(Integer.parseInt(GlobalVars.getVar("defaultWidth")),Integer.parseInt(GlobalVars.getVar("defaultHeight"))));
         if(scripts.size()>0){
             if(scripts.getFirst().remove == true){
                 scripts.remove();
@@ -145,15 +151,24 @@ public class BayScript extends Canvas implements Runnable{
     }
     
     public void render(){
-       if(scripts.size()>0){
-                {
-                    scripts.getFirst().render(g);
-                }
-            }
+        BufferStrategy buffer = this.getBufferStrategy();
+        if(buffer!=null){
+        Graphics g = buffer.getDrawGraphics();
+            if(scripts.size()>0){
+                scripts.getFirst().render(g);
+             }
+            g.dispose();
+        buffer.show();
+        }
     }
     
     public static void addScript(String name, String[] data){
         Script script = new Script(name, data);
+        BayScript.scripts.add(script);
+    }
+    
+    public static void addScript(String path){
+        Script script = new Script(path);
         BayScript.scripts.add(script);
     }
     
@@ -168,5 +183,10 @@ public class BayScript extends Canvas implements Runnable{
         }
         
         throw new ScriptNotFoundException(name);
+    }
+    
+    public static void main(String[] args){
+        BayScript.invoke();
+        BayScript.addScript("screen_test.txt");
     }
 }

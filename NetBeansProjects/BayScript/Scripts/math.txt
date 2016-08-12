@@ -1,0 +1,17 @@
+set-persist=true
+set-loop=true
+
+init:{
+	define-int:count=1
+	define-int:lastCount=1
+}
+
+if:(= (count) NaN){
+	cmd_loadScript:screen_test
+}
+
+if:(! (count) NaN){
+	cmd_print:(count)
+	set-lastCount=(- count lastCount)
+	set-count=(+ count lastCount)
+}

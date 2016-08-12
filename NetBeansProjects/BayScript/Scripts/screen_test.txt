@@ -1,0 +1,10 @@
+set-persist=true
+set-loop=true
+
+init:{
+set-defaultName=Screen Test
+set-defaultWidth=720
+set-defaultHeight=680
+}
+
+//dcmd_print:(defaultName):(defaultWidth)x(defaultHeight)
